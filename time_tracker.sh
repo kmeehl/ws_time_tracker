@@ -42,7 +42,7 @@ WORK_START_DELAY=60
 
 # Working time recording is in minutes. WORK_RECORD_PRECISION is how many digits
 # after the decimal point to show in the records
-WORK_RECORD_PRECISION=2
+WORK_RECORD_PRECISION=1
 
 # $TT_HOME/work_elapsed shows the current elapsed time in the currently running
 # work time block, in minutes. This file can be read by other apps/tools to show
@@ -58,6 +58,7 @@ current_ws ()
 ws_changed()
 {
   ws=$(current_ws)
+  echo "ws: $ws"
   case "$ws" in
   $WORKING_WORKSPACES)
     if [ "$W_START" == "" ]; then
@@ -86,25 +87,20 @@ work_finished()
 
   now=`date +%s`
   W_elapsed=`expr $now - $W_START`
-  echo "Now: $now, W_elapsed: $W_elapsed"
   if [ "$W_elapsed" -lt "$WORK_START_DELAY" ]; then
     return
   fi
-  # W_START=`expr $W_START - $WORK_START_DELAY`
-  # echo "W_START: $W_START"
 
   if [ "$immediate" != true ]; then
     now=`expr $(date +%s) - $WORK_STOP_DELAY`
     echo "new now: $now"
   fi
   W_elapsed=`expr $now - $W_START`
-  echo "W_elapsed: $W_elapsed"
+  W_elapsed=`echo "scale=$WORK_RECORD_PRECISION; $W_elapsed / 60" | bc`
 
-
-  time_file=`date +%m-%Y`
-  #W_elapsed=`echo "scale=$WORK_RECORD_PRECISION; $W_elapsed / 60" | bc`
   timestamp=`date +%a-%Y/%m/%d`
   human_range="$(date -d @$W_START +%a-%Y/%m/%d@%H:%M) to $(date -d @$now +%a-%Y/%m/%d@%H:%M)"
+  time_file=`date +%m-%Y`
   (
   w_response=$(yad --entry --title "Time Tracking: what did you work on?" --geometry=500x50+700+500 --text "From $human_range" --sticky --on-top --center)
   if [ "$w_response" == "" ]; then
@@ -127,13 +123,13 @@ reset ()
 WS=$(current_ws)
 ws_changed
 while [ true ] ; do
-  echo .
   # check for stop
   if [ -f $TT_HOME/stop ]; then
     reset
     rm $TT_HOME/stop
     exit 0
   fi
+
   # check for reset
   if [ -f $TT_HOME/reset ]; then
     reset
@@ -149,6 +145,7 @@ while [ true ] ; do
       work_finished
     fi
   fi
+
   if [ "$W_START" != "" ]; then
       w_elapsed=`expr $(date +%s) - $W_START`
       if [ "$w_elapsed" -lt "$WORK_START_DELAY" ]; then
