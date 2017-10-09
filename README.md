@@ -52,4 +52,13 @@ sudo apt install wmctrl yad
 
 `TBD`
 
+## Gnome Shell Integration
 
+TT supports gnome shell integration by adding a new icon and dropdown menu to the Panel. With gnome shell integration, TT can show current work elapsed time, and provide start, stop, and context switch GUI commands.
+
+TT uses [Argos](https://github.com/p-e-w/argos) to support gnome shell integration.
+
+### Installation
+
+Install the [Argos gnome shell extension](https://extensions.gnome.org/extension/1176/argos/) and copy `argos/time_tracker.0r.10s.sh` to `~/.config/argos/`.
+Review the Argos documentation for more details.
