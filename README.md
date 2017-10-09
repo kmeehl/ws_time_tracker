@@ -4,20 +4,18 @@ Workspace Time Tracker service tracks time spent working based on the window man
 TT will prompt for a description of the last time block when it detects you have stopped
 working (by switching to a non-working workspace).
 
-TT tries to stay out of your way by waiting for WORK_STOP_DELAY seconds after switching back to a non-working workspace
-before assuming you've stopped working and promping for description. The idea is we all context switch out of work in 
-order to answer a quick message, check weather, etc -- but it's best to continue assuming we've not stopped working unless
-we've been off of a working workspace for long enough. Similarly, TT will not assuume you've started working until you've
-been in a working workspace for WORK_START_DELAY seconds. WORK_STOP_DELAY and WORK_START_DELAY are configurable values in
-the script.
- 
+TT tries to stay out of your way by waiting for WORK_STOP_DELAY seconds after switching from a working workspace to
+a non-working workspace to assume you've stopped working. The idea is we all context switch out of work in order to
+answer a quick message, check weather, etc -- but it's best assume we've not stopped working unless we've been off
+of a working workspace for long enough. Similarly, TT will start recording work until you've been in a working
+workspace for WORK_START_DELAY seconds. WORK_STOP_DELAY and WORK_START_DELAY are configurable values in the script.
 
 ## Usage
 
 ### Start
 Add to PATH and run from command line:
 ```
-$ ./time_tracker.sh &
+$ nohup ./time_tracker.sh &
 ```
 Or add to your desktop startup applications
 
@@ -30,7 +28,7 @@ $ touch $TT_HOME/stop
 ```
 Note: no time will be recorded if the time block is less than WORK_START_DELAY
 
-TT_HOME is configurable -- default value is ~/time_tracking
+By default, TT_HOME is `~/time_tracking`, but it is configurable
 
 To record a new block of work immediately without stopping TimeTracker (and without
 switching workspaces and watiting for WORK_STOP_DELAY), create an empty file `$TT_HOME/reset`:
@@ -42,7 +40,7 @@ Note: no time will be recorded if the time block is less than WORK_START_DELAY
 
 ## Installation
 
-TT uses `wmctrl` and `yad`
+TT requires [wmctrl](https://www.freedesktop.org/wiki/Software/wmctrl/) and [yad](http://www.webupd8.org/2010/12/yad-zenity-on-steroids-display.html)
 
 ### Ubuntu
 
