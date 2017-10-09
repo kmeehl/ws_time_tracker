@@ -7,7 +7,7 @@ working (by switching to a non-working workspace).
 TT tries to stay out of your way by waiting for WORK_STOP_DELAY seconds after switching from a working workspace to
 a non-working workspace to assume you've stopped working. The idea is we all context switch out of work in order to
 answer a quick message, check weather, etc -- but it's best assume we've not stopped working unless we've been off
-of a working workspace for long enough. Similarly, TT will start recording work until you've been in a working
+of a working workspace for long enough. Similarly, TT will not start recording work until you've been in a working
 workspace for WORK_START_DELAY seconds. WORK_STOP_DELAY and WORK_START_DELAY are configurable values in the script.
 
 ## Usage
