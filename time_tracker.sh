@@ -24,6 +24,11 @@
 # Location to store time tracking files. Timestamps are partitioned by month.
 TT_HOME=~/time_tracking
 
+# [Integer] | [Integer-range] Zero-indexed identifier of the desktops you use to work.
+# By default, the first(0th) workspace is the only workspace considered non-working,
+# ie. personal use.
+WORKING_WORKSPACES="[1-9]"
+
 # [Seconds] Delay when switching from working workspace to non-working workspace
 # before work is considered to have stopped. Switching to non-working workspace
 # and then back to working workspace in less than WORK_STOP_DELAY seconds will
@@ -54,18 +59,18 @@ ws_changed()
 {
   ws=$(current_ws)
   case "$ws" in
-  0)
+  $WORKING_WORKSPACES)
+    if [ "$W_START" == "" ]; then
+      W_START=`date +%s`
+    fi
+  ;;
+  *)
     NW_START=`date +%s`
     if [ "$W_START" != "" ]; then
       w_elapsed=`expr $(date +%s) - $W_START`
       if [ "$w_elapsed" -lt "$WORK_START_DELAY" ]; then
         W_START=""
       fi
-    fi
-  ;;
-  [1-9]*)
-    if [ "$W_START" == "" ]; then
-      W_START=`date +%s`
     fi
   ;;
   esac
