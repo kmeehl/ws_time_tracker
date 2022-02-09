@@ -121,6 +121,21 @@ reset ()
   ws_changed
 }
 
+
+# if there's already work on start...
+# this can happen if this process was killed unexpectedly
+# we try to record previous work, rather than just lose it
+if [ -f $TT_HOME/work_elapsed ]; then
+    secs=`cat $TT_HOME/work_elapsed |sed 's/$/ * 60 /' | bc`
+    now=`date +%s`
+    W_START=`echo "$now - $secs" | bc`
+    work_finished true
+    reset
+fi
+if [ -f $TT_HOME/stop ]; then
+    rm $TT_HOME/stop
+fi
+
 WS=$(current_ws)
 ws_changed
 while [ true ] ; do
