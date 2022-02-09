@@ -6,7 +6,7 @@ fi
 echo " | iconName=chronometer"
 echo "---"
 
-TTPS=`ps aux |grep time_tracker.sh |grep -v grep`
+TTPS=`ps aux |grep time_tracker.sh |grep -v grep |grep -v vim`
 if [ -z "$tt_elapsed" ]; then
   echo "Timetracker (stopped) | iconName=chronometer  terminal=false"
   RUNNING="Stopped"
