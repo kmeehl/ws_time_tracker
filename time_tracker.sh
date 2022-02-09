@@ -52,13 +52,14 @@ WORK_ELAPSED_PRECISION=0
 
 current_ws ()
 {
-  wmctrl -d | grep \* | cut -d " " -f 1
+  #wmctrl -d | grep \* | cut -d " " -f 1
+  xprop -root -notype  _NET_CURRENT_DESKTOP |sed 's/.*= //g'
 }
 
 ws_changed()
 {
   ws=$(current_ws)
-  echo "ws: $ws"
+  #echo "ws: $ws"
   case "$ws" in
   $WORKING_WORKSPACES)
     if [ "$W_START" == "" ]; then
