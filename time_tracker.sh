@@ -133,12 +133,17 @@ reset ()
 # this can happen if this process was killed unexpectedly
 # we try to record previous work, rather than just lose it
 if [ -f $TT_HOME/work_elapsed ]; then
-    secs=`cat $TT_HOME/work_elapsed |sed 's/$/ * 60 /' | bc`
-    now=`date +%s`
-    W_START=`echo "$now - $secs" | bc`
-    work_finished true
-    reset
+    secs=$(cat $TT_HOME/work_elapsed)
+    re='^[0-9]+$'
+    if [[ $secs =~ $re ]] ; then
+        secs=$(echo $secs | sed 's/$/ * 60 /' | bc)
+        now=`date +%s`
+        W_START=`echo "$now - $secs" | bc`
+        work_finished true
+        reset
+    fi
 fi
+
 if [ -f $TT_HOME/stop ]; then
     rm $TT_HOME/stop
 fi
