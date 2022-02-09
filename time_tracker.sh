@@ -148,8 +148,10 @@ while [ true ] ; do
 
   if [ "$W_START" != "" ]; then
       w_elapsed=`expr $(date +%s) - $W_START`
-      if [ "$w_elapsed" -lt "$WORK_START_DELAY" ]; then
+      if [ "$w_elapsed" -gt "$WORK_START_DELAY" ]; then
         echo "scale=$WORK_ELAPSED_PRECISION; $(expr $(date +%s) - $W_START) / 60" | bc > $TT_HOME/work_elapsed
+      else
+        echo "--" > $TT_HOME/work_elapsed
       fi
   elif [ -f $TT_HOME/work_elapsed ]; then
     rm $TT_HOME/work_elapsed
