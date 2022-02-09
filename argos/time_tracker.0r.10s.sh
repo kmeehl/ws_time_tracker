@@ -23,3 +23,4 @@ echo "---"
 echo " <span color='green'>start</span> | iconName=chronometer-start bash='nohup ~/bin/time_tracker.sh & >/dev/null' terminal=false"
 echo " <span color='lightblue'>context switch</span> | iconName=chronometer-reset bash='touch ~/time_tracking/reset' terminal=false"
 echo " <span color='red'>stop</span> | iconName=chronometer-pause bash='touch ~/time_tracking/stop' terminal=false"
+

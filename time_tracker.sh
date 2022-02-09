@@ -102,12 +102,19 @@ work_finished()
   timestamp=`date +%a-%Y/%m/%d`
   human_range="$(date -d @$W_START +%a-%Y/%m/%d@%H:%M) to $(date -d @$now +%a-%Y/%m/%d@%H:%M)"
   time_file=`date +%m-%Y`
+
+  # we run the prompt async to avoid losing the ability to track time while it's running
   (
-  w_response=$(yad --entry --title "Time Tracking: what did you work on?" --geometry=500x50+700+500 --text "From $human_range" --sticky --on-top --center)
-  if [ "$w_response" == "" ]; then
-    w_response="---"
-  fi
-  echo -e "$timestamp\t$W_elapsed\t$w_response" >> $TT_HOME/$time_file
+    w_response=""
+    if [[ -f $TT_HOME/last_response ]] ; then
+      w_response=$(cat $TT_HOME/last_response)
+    fi
+    w_response=`yad --entry --title "Time Tracking: what did you work on?" --geometry "500x50+700+500" --text "From $human_range" --entry-text "$w_response" --sticky --on-top --center`
+    if [ "$w_response" == "" ]; then
+      w_response="---"
+    fi
+    echo -n "$w_response" > $TT_HOME/last_response
+    echo -e "$timestamp\t$W_elapsed\t$w_response" >> $TT_HOME/$time_file
   ) &
   W_START=""
 }
